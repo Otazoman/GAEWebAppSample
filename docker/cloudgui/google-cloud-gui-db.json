@@ -1,0 +1,10 @@
+{
+  "projects": [
+    {
+      "service": "datastore",
+      "projectId": "tohonokai-web",
+      "apiEndpoint": "http://datastore:8081",
+      "id": "default"
+    }
+  ]
+}
