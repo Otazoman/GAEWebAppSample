@@ -12,8 +12,8 @@ def InsertDatastore(keyname,data):
         key = client.key(keyname)
         entity = datastore.Entity(key)
         entity.update(data)
-        client.put(entity)
-        return True
+        result = client.put(entity)
+        return result
     except Exception as e:
         print('Error Insert table:' + keyname )
         t, v, tb = sys.exc_info()
@@ -38,26 +38,97 @@ def SearchDataStore(kind_name,search):
         print(traceback.format_tb(e.__traceback__))
         return False
 
+def GetDataStoreId(searchresult):
+    """ Get Datastore Record Key Id """
+    try:
+        result = []
+        for entity in searchresult:   
+            gid = entity.id
+            result.append(gid)
+        return result
+    except Exception as e:
+        print('Error Get ID')
+        t, v, tb = sys.exc_info()
+        print(traceback.format_exception(t,v,tb))
+        print(traceback.format_tb(e.__traceback__))
+        return False
+
+def UpdateDatastore(kind,target_id,prop):
+    """ Update Datastore  """
+    try:
+        key = client.key(kind,target_id)
+        data = client.get(key)
+        data.update(prop)
+        result = client.put(data)
+        return result
+    except Exception as e:
+        print('Error Update Kind:'+kind)
+        t, v, tb = sys.exc_info()
+        print(traceback.format_exception(t,v,tb))
+        print(traceback.format_tb(e.__traceback__))
+        return False
+
+def DeleteDatastore(kind,target_id):
+    """ Delete Datastore  """
+    try:
+        key = client.key(kind,target_id)        
+        result = client.delete(key)
+        return result
+    except Exception as e:
+        print('Error Delete Kind:'+kind)
+        t, v, tb = sys.exc_info()
+        print(traceback.format_exception(t,v,tb))
+        print(traceback.format_tb(e.__traceback__))
+        return False
+
+
 def main():
     keyname = "Tasks"
-    data = {
-             'status': 'Doing',
-             'date': '20191231',
-             'value':'SampleSSSS'
-    }
 
-    r = InsertDatastore(keyname,data)
+    datas = []
+    i = 0
+    while i < 5:
+          data = dict()
+          data['test_key1'] = 'value' + str(i)
+          data['test_key2'] = 'value' + str(i)
+          data['test_key3'] = 'value' + str(i)
+          datas.append(data)
+          i += 1
+    
+    # Insert
+    for rec in datas:
+        InsertDatastore(keyname,rec)
 
+    # Search
     search = {
-                   'value':'SampleValues'
+                   'test_key1':'value2'
     }
+    searchresult = SearchDataStore(keyname,search)
+    gid = GetDataStoreId(searchresult)
+    for s in searchresult:
+        print(s)
+    
+    # Update
+    updatekey ={
+                   'test_key1':'value3'
+    }
+    update_value ={
+                   'test_key1':'AAA1',
+                   'test_key2':'BBB2',
+                   'test_key3':'CCC3',
+                   'test_key4':'Done'
+    }
+    preud = SearchDataStore(keyname,updatekey)
+    uid = GetDataStoreId(preud)
+    for u in uid:
+        UpdateDatastore(keyname,u,update_value)
 
-    kname = 'Tasks'
-    r = SearchDataStore(kname,search)
-    print(r)
+    # Delete
+    for d in gid:
+        rtn = DeleteDatastore(keyname,d)
+
+    print('Done')
 
 
 if __name__ == '__main__':
    main()
-
-
