@@ -1,10 +1,10 @@
 import sys
 import traceback
-from datastore_crud  import DataStoreOperate
+from datastore_crud  import DataStoreCRUD
 
 def main():
     try:
-        ds_crud =  DataStoreOperate()
+        ds_crud =  DataStoreCRUD()
 
         keyname = "Tasks"
 
@@ -45,12 +45,22 @@ def main():
         uid = ds_crud.get_datastore_id(preud)
         for u in uid:
             ds_crud.update_datastore(keyname,u,update_value)
+        
+        # All
+        #search = ''
+        #searchresult = ds_crud.search_datastore(keyname,search)
+        #for s in searchresult:
+        #    print(s)
 
         # Delete
         for d in gid:
             rtn = ds_crud.delete_datastore(keyname,d)
 
         print('Done')
+
+        lt = ds_crud.get_kainds_list()
+        print(lt)
+
     except Exception as e:
         print('Error')
         t, v, tb = sys.exc_info()
