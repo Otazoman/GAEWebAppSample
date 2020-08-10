@@ -26,16 +26,16 @@ class HtmlRender():
             print(traceback.format_exception(t,v,tb))
             print(traceback.format_tb(e.__traceback__))
             return False
-    def conditionrender(self,data):
+    def conditionrender(self,data,mode):
         """ Make Html Tag """
         try:
             conditions = self.get_keys(data)
-            body = '<p>SearchKey:<select name = "key_name">'
+            body = '<p>SearchKey:<select name = "'+ mode + '_key_name">'
             conditions.sort()
             for c in conditions:
                 body +='<option value="'  + str(c) +'">'   + str(c) + '</option>'
             body += '</select></p>'
-            body +='<p>Value: <input type="text" name="value" size="10"></input></p>' 
+            body +='<p>Value: <input type="text" name="'+ mode + '_value" size="10"></input></p>' 
             return body
         except Exception as e:
             print('Error Render')

@@ -30,20 +30,22 @@ def started():
 def select():
     #Get Tablelist
     tl = ds.get_kinds_list()
-    #default_val = ds.get_default_table(tl)
     default_val = tl[0]
     cond = ''
     # Get Request View Render
     if request.method == 'GET':
        slbox = vr.make_selectbox(tl,default_val)
        results = ds.select_records(cond,default_val)
-       conditions = vr.conditionrender(results)
-       return render_template('select.html',selectbox=slbox,conditions=conditions)
+       mode = 'condition'
+       conditions = vr.conditionrender(results,mode)
+       mode = 'update'
+       update = vr.conditionrender(results,mode)
+       return render_template('select.html',selectbox=slbox,conditions=conditions,update=update)
     # Post Request Param Send
     if request.method == 'POST':
        tn = request.form.get('table_name')
-       ck = request.form.get('key_name')
-       cv = request.form.get('value')
+       ck = request.form.get('condition_key_name')
+       cv = request.form.get('condition_value')
        if len(cv) !=0:
           conditions = {ck:cv}
        else:
@@ -57,8 +59,11 @@ def select():
           results = ds.select_records(cond,tn)
        body = vr.tablerender(results)
        slbox = vr.make_selectbox(tl,tn)
-       conditions = vr.conditionrender(results)
-       return render_template('select.html',content=body,selectbox=slbox,conditions=conditions)
+       mode = 'condition'
+       conditions = vr.conditionrender(results,mode)
+       mode = 'update'
+       update = vr.conditionrender(results,mode)
+       return render_template('select.html',content=body,selectbox=slbox,conditions=conditions,update=update)
 
 @app.route("/upload", methods=['GET', 'POST'])
 def upload():

@@ -63,18 +63,3 @@ class DataStoreOperate:
             print(traceback.format_exception(t,v,tb))
             print(traceback.format_tb(e.__traceback__))
             return False
-    def get_default_table(self,listtables):
-        """ Avail Record Table """
-        try:
-            conditions=""
-            dc = DataStoreCRUD()
-            for lt in listtables:
-                tc0 = ro.getvalue_table(account=self.account,tablename=lt,conditions=conditions)
-                for r in tc0:
-                    if r:
-                       return lt
-        except Exception as e:
-            t, v, tb = sys.exc_info()
-            print(traceback.format_exception(t,v,tb))
-            print(traceback.format_tb(e.__traceback__))
-            return False
