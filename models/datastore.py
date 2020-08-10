@@ -43,9 +43,9 @@ class DataStoreOperate:
         try:
             dc = DataStoreCRUD()
             sr = dc.search_datastore(kindname,condition)
-            ids = get_datastore_id(sr)
+            ids = dc.get_datastore_id(sr)
             for i in ids:
-                dc.delete_records(self,i,kindname)
+                dc.delete_datastore(kindname,i)
             return True
         except Exception as e:
             t, v, tb = sys.exc_info()

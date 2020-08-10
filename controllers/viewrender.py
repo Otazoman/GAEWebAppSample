@@ -4,23 +4,11 @@ import traceback
 
 class HtmlRender():
     """
-    テーブルを描画して返す
+    検索条件とテーブルを描画して返す
     """
     def __init__(self,data=None):
         self.data = data
-    def tablerender(self,data):
-        """ Body Table Render"""
-        try:
-            t = self.get_title(data)
-            ohtml = self.make_html(t,data)
-            return ohtml
-        except Exception as e:
-            print('Error TableRendermain' )
-            t, v, tb = sys.exc_info()
-            print(traceback.format_exception(t,v,tb))
-            print(traceback.format_tb(e.__traceback__))
-            return False
-    def get_title(self,data):
+    def get_keys(self,data):
         """ Make Titele"""
         try:
             keys = []
@@ -33,12 +21,42 @@ class HtmlRender():
                     break
             return keys
         except Exception as e:
-            print('Error get_title')
+            print('Error get_keys')
             t, v, tb = sys.exc_info()
             print(traceback.format_exception(t,v,tb))
             print(traceback.format_tb(e.__traceback__))
             return False
-    def make_html(self,titles,data):
+    def conditionrender(self,data):
+        """ Make Html Tag """
+        try:
+            conditions = self.get_keys(data)
+            body = '<p>SearchKey:<select name = "key_name">'
+            conditions.sort()
+            for c in conditions:
+                body +='<option value="'  + str(c) +'">'   + str(c) + '</option>'
+            body += '</select></p>'
+            body +='<p>Value: <input type="text" name="value" size="10"></input></p>' 
+            return body
+        except Exception as e:
+            print('Error Render')
+            t, v, tb = sys.exc_info()
+            print(traceback.format_exception(t,v,tb))
+            print(traceback.format_tb(e.__traceback__))
+            return False
+    def tablerender(self,data):
+        """ Body Table Render"""
+        try:
+            t = self.get_keys(data)
+            t.sort()
+            ohtml = self.make_table_html(t,data)
+            return ohtml
+        except Exception as e:
+            print('Error TableRendermain' )
+            t, v, tb = sys.exc_info()
+            print(traceback.format_exception(t,v,tb))
+            print(traceback.format_tb(e.__traceback__))
+            return False
+    def make_table_html(self,titles,data):
         """ Make Html Tag """
         try:
             body = """
@@ -107,7 +125,7 @@ class HtmlRender():
             body += '</select>'
             return body
         except Exception as e:
-            print('Error get_title')
+            print('Error gmake_selectbox')
             t, v, tb = sys.exc_info()
             print(traceback.format_exception(t,v,tb))
             print(traceback.format_tb(e.__traceback__))

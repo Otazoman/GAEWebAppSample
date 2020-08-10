@@ -32,35 +32,33 @@ def select():
     tl = ds.get_kinds_list()
     #default_val = ds.get_default_table(tl)
     default_val = tl[0]
+    cond = ''
     # Get Request View Render
     if request.method == 'GET':
        slbox = vr.make_selectbox(tl,default_val)
-       return render_template('select.html',selectbox=slbox)
+       results = ds.select_records(cond,default_val)
+       conditions = vr.conditionrender(results)
+       return render_template('select.html',selectbox=slbox,conditions=conditions)
     # Post Request Param Send
     if request.method == 'POST':
        tn = request.form.get('table_name')
-       pkey = request.form.get('partitionkey')
-       rkey = request.form.get('rowkey')
-       if len(pkey) !=0 and len(rkey) !=0:
-          conditions = [pkey,rkey]
-       elif len(pkey):
-          conditions = "PartitionKey eq '" + pkey +"'"
+       ck = request.form.get('key_name')
+       cv = request.form.get('value')
+       if len(cv) !=0:
+          conditions = {ck:cv}
        else:
-          conditions = ""
-       # Call Select Records
+          conditions = ''
+       #Search Records
        if request.form.get('search') == '検索':
           results = ds.select_records(conditions,tn)
-          body = vr.tablerender(results)
-          slbox = vr.make_selectbox(tl,tn)
-          return render_template('select.html',content=body,selectbox=slbox)
-       # Call Delete Records
+       #Delete Records
        elif request.form.get('delete') == '削除':
           ds.delete_records(conditions,tn)
-          ac = ""
-          results = ds.select_records(ac,tn)
-          body = vr.tablerender(results)
-          slbox = vr.make_selectbox(tl,tn)
-          return render_template('select.html',content=body,selectbox=slbox)
+          results = ds.select_records(cond,tn)
+       body = vr.tablerender(results)
+       slbox = vr.make_selectbox(tl,tn)
+       conditions = vr.conditionrender(results)
+       return render_template('select.html',content=body,selectbox=slbox,conditions=conditions)
 
 @app.route("/upload", methods=['GET', 'POST'])
 def upload():
@@ -70,7 +68,7 @@ def upload():
        file = request.files['uploadFile']
        if file:
           filename = secure_filename(file.filename)
-          # Get Upsert KindName
+          # Get Insert KindName
           kn = os.path.splitext(filename)[0]
           filepath = os.path.join(UPLOAD_DIR, filename) 
           file.save(filepath)
