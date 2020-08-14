@@ -6,4 +6,3 @@ Scripts/
 tcl/
 __pycache__/
 .git/
-config.py
