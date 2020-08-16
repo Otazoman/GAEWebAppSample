@@ -6,7 +6,6 @@ click==7.1.2
 cycler==0.10.0
 Flask==1.1.1
 Flask-API==2.0
-get==2019.4.13
 google==3.0.0
 google-api-core==1.21.0
 google-api-python-client==1.10.0
@@ -27,7 +26,6 @@ make-response==1
 MarkupSafe==1.1.1
 matplotlib==3.2.1
 numpy==1.18.5
-post==2019.4.13
 protobuf==3.12.2
 public==2019.4.13
 pyasn1==0.4.8
@@ -36,7 +34,6 @@ pyparsing==2.4.7
 python-dateutil==2.8.1
 pytz==2020.1
 query-string==2019.4.13
-request==2019.4.13
 requests==2.24.0
 response==0.4.0
 rsa==4.6

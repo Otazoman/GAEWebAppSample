@@ -18,7 +18,7 @@ from viewrender import HtmlRender
 app = Flask(__name__)
 
 app.config['MAX_CONTENT_LENGTH'] = 1 * 1024 * 1024
-UPLOAD_DIR = os.getcwd()
+UPLOAD_DIR = '/tmp/'
 ds = DataStoreOperate()
 vr = HtmlRender()
 
@@ -101,4 +101,4 @@ def handle_over_max_file_size(error):
 
 if __name__ == '__main__':
 #    app.run(debug=True)
-    app.run(host='0.0.0.0', port=5000)
+    app.run()

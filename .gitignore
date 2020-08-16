@@ -1,6 +1,7 @@
 .vscode/
 Include/
 Lib/
+lib/
 Scripts/
 **.pyc
 tcl/
